@@ -7,7 +7,7 @@ class Function:
     (input) a array of values ex: [2,3,3,3] 
     Function sticks them into Fx and computes the output.
     '''
-    def makePredictions(self,input):
+    def make_predictions(self,input):
         self.predictedValues = []
         self.reversedFunction = self.function[::-1] #reverses the function order (it makes it easer to compute)
         for dataPoint in input:
@@ -21,6 +21,8 @@ class Function:
     '''
     https://stackoverflow.com/questions/50457921/cost-function-mean-squared-error-formulae
     '''
-    def computeCost(self,input):
-        self.inputLength = len(input)
-        return  (1/(2(self.inputLength))) * (sum(self.makePrediction(input)))
+    def compute_cost(self,input):
+        sum = 0
+        self.input_length = len(input)
+        
+        return  (1/(2(self.inputLength))) * (sum(self.make_predictions(input)))

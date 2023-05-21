@@ -5,8 +5,8 @@ from Function import Function
 class Main:
     def __init__(self):
         data = Data()
-        function = Function()
-        UI(data,function)
+        function = Function("x^2 + 3x -5")
+        ui = UI(data,function)
     pass
     
 

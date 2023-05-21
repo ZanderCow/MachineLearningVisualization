@@ -6,7 +6,7 @@ class UI:
     '''
     builds the UI when a object of the class is instantiated
     '''                  
-    def __init__(self,Data,Function):
+    def __init__(self,data_object,function_object):
         #Main Window
         self.window = Tk()
         self.window.title("Machine Learning Thing")
@@ -35,11 +35,14 @@ class UI:
         #preform regression
         self.preform_regression = Button(self.tools,text="Preform Regression", command=None).pack()
         
-        self.plot_graph(Data,Function)
+        #updates cost function label to match the cost
+        self.cost_function_label["text"] = "Cost: " + str(function_object.compute_cost(data_object)) #updates cost function
+
+        self.plot_graph(data_object,function_object)
         self.window.mainloop()
 
 
-
+        
 
 
  
@@ -60,11 +63,5 @@ class UI:
 
         self.graph_canvas.draw()
 
-        ''' (cost function Label)
-        Cost.get_cost() #computes cost
-        self.CostFunctionLabel["text"] = ("Cost: " + str(Cost.mean_squared_error)) #updates cost function
-        print(Hypothesis.hyp)
-        '''
     
-    def doRegression(self):
-        self.plot_graph()
+   

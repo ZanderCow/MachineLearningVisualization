@@ -12,8 +12,8 @@ class Data:
                 self.ydata = next(reader, None)
 
                 #convert data to int
-                self.xdata = [int(x) for x in self.xdata]
-                self.ydata = [int(x) for x in self.ydata]
+                self.xdata = [float(x) for x in self.xdata]
+                self.ydata = [float(x) for x in self.ydata]
         except FileNotFoundError:
             print("Error: data.csv file not found.")
         except Exception as e:

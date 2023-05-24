@@ -1,17 +1,17 @@
-import csv
 from Data import Data
-from UI import UI
 from Function import Function
-class Main:
-    def __init__(self):
-        data = Data()
-        function = Function("x^2 + 3x -5")
-        ui = UI(data,function)
-    pass
+from DataUtils import DataUtils
+from FunctionUtils import FunctionUtils
+
+
+data = Data()
+function = Function()
+
+data.x_values, data.y_values = DataUtils.pull_data_from_csv_file('Data.csv')
+
+y_values = FunctionUtils.compute_array_of_values(function.coefficents ,function.powers, data.x_values)
+print(y_values)
     
 
 
 
-
-if __name__ == '__main__':
-    main = Main()

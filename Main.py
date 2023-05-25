@@ -9,9 +9,10 @@ function = Function()
 
 data.x_values, data.y_values = DataUtils.pull_data_from_csv_file('Data.csv')
 
-y_values = FunctionUtils.compute_array_of_values(function.coefficents ,function.powers, data.x_values)
+y_values = FunctionUtils.compute_array_of_xvalues_multi_threaded(function.function, data.x_values)
 print(y_values)
-    
+
+
 
 
 

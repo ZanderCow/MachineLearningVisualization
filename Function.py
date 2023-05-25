@@ -1,5 +1,5 @@
+import numpy as np
 class Function:
     def __init__(self):
-        self.coefficents = [1,2,3]
-        self.powers = [2,1,0]
+        self.function = np.poly1d([1,3,4])
     pass

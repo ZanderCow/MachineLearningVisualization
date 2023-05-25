@@ -28,7 +28,7 @@ class UI:
         self.cost_function_label.pack()
 
         #variable that whatever is in the text box gets stored
-        self.learning_rate_variable = StringVar()
+        self.learning_rate_variable = StringVar() 
         self.learning_rate_variable.set("")
         self.learning_rate_text_box = Entry(self.tools, bg="White", fg = "Black", textvariable= self.learning_rate_variable).pack()
         
@@ -37,15 +37,14 @@ class UI:
         
         #updates cost function label to match the cost
         self.cost_function_label["text"] = "Cost: " + str(function_object.compute_cost(data_object)) #updates cost function
-
+        '''
         self.plot_graph(data_object,function_object)
         self.window.mainloop()
-
+        '''
 
         
 
 
- 
     def plot_graph(self,data_object,function_object):
         """
         Plots the graph.
@@ -55,7 +54,7 @@ class UI:
             function_object (Function): An instance of the Function class.
         """
         self.graph.clear() # resets the graph
-        self.graph.scatter(data_object.xdata, data_object.ydata)
+        self.graph.scatter(data_object.x_values, data_object.y_values)
         
         #Scatters another graph over top 
         # also calls .make_predictions() on the function_object

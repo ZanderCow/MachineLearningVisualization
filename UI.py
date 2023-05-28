@@ -5,11 +5,12 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from DataUtils import DataUtils
 from FunctionUtils import FunctionUtils
 from tkinter import filedialog
+from sympy import symbols, lambdify, sympify
+import numpy as np
 
 class MainUI:
     """
-    A class used to represent the Main User Interface for the Machine Learning application.
-
+    A class used to represent the Main User Interface 
     ...
 
     Attributes
@@ -49,7 +50,7 @@ class MainUI:
         To be implemented - supposed to initiate or recreate the optimization window
     """
     def __init__(self,data_object,function_object):
-        """Initializes the MainUI with data_object and function_object and constructs the Tkinter GUI."""
+
         self.data_object = data_object
         self.function_object = function_object
 
@@ -81,29 +82,25 @@ class MainUI:
 
         self.main_window.mainloop()
     
-    def update_graph(self):
-        """
-        Updates the graph based on the current data and function object. 
-        It plots the actual data and the predicted data from the function object. 
-        If the function is updated or data is changed, this method should be called to reflect changes on the graph.
-        """
+    def update_graph(self,x_values,y_values):
+        
         function = self.function_object.function
-        x_data = self.data_object.x_values
-        y_data = self.data_object.y_values
-        predicted_y_data = FunctionUtils.compute_array_of_xvalues_multi_threaded(function,x_data)
+        x_data = x_values
+        y_data = y_values
+        #predicted_y_data = FunctionUtils.compute_array_of_xvalues_multi_threaded(function,x_data)
         
         self.graph.clear() # resets the graph
         self.graph.scatter(x_data, y_data)
-        self.graph.scatter(x_data, predicted_y_data)
+        #self.graph.scatter(x_data, predicted_y_data)
         self.graph_canvas.draw()
         
     def draw_data_window(self):
         """
-        Initiates or recreates the data window. 
+        Initiates and creates the data window. 
         If a data window already exists, it is destroyed and set to None.
         """
         if self.data_window is None or not self.data_window.winfo_exists():
-            self.data_window = DataWindow(self.main_window)
+            self.data_window = DataWindow(self)
         else:
             self.data_window.destroy()
             self.data_window = None
@@ -151,7 +148,9 @@ class DataWindow():
     randomness_ammount_slider : tk.Scale
         A slider to adjust the amount of randomness for the guassian noise
     generated_values_range_frame, range_min_text_box, range_or_text, range_max_text_box : tk.Frame, tk.Text, tk.Label, tk.Text
-        ahhhh
+        tkinter stuff that holds the range selection area
+    generate_data_button : tk.Button
+        button that when clicked, will call a function called generate_data()
     Methods
     -------
     data_collection_option_changed(*args):
@@ -160,8 +159,9 @@ class DataWindow():
     open_file():
         Opens a file dialog to choose a CSV file and prints the chosen file's name.
     """
-    def __init__(self,main_window_reference):
-        self.data_window = tk.Toplevel(main_window_reference)
+    def __init__(self,main_ui_reference):
+        self.main_ui_reference = main_ui_reference
+        self.data_window = tk.Toplevel(main_ui_reference.main_window)
         self.data_window.title('Data')
         self.data_window.geometry("750x500")
 
@@ -176,29 +176,44 @@ class DataWindow():
         self.drop_down_window_menu = tk.OptionMenu(self.data_window, self.drop_down_window, 'pull from csv file', 'guassian noise')
         self.drop_down_window_menu.grid(row=0,column=2) 
 
+        self.chose_csv_file_frame = tk.Frame(self.data_window)
+        
+
         self.file_button = tk.Button(self.data_window, text='Choose CSV file', command=self.open_file)
 
         self.function = tk.StringVar()
-        self.range_min = tk.DoubleVar()
-        self.range_max = tk.DoubleVar()
+        self.range_min = tk.IntVar()
+        self.range_max = tk.IntVar()
+        self.num_data_points = tk.IntVar()
         self.randomness_ammount = tk.DoubleVar()
 
+        #chose function stuff
         self.chose_function_frame = tk.Frame(self.data_window)
         self.function_text_label = tk.Label(self.chose_function_frame,text="Function")
         self.function_text_label.pack()
-        self.function__text_box = tk.Text(self.chose_function_frame, height=1, width=25)
-        self.function__text_box.pack()
+        self.function__text_box_entry = tk.Entry(self.chose_function_frame, width=25,text='Function') #varianle that gets stored in
+        self.function__text_box_entry.pack()
 
+        #generated values stuff
         self.generated_values_range_frame = tk.Frame(self.data_window)
-        self.range_min_text_box = tk.Text(self.generated_values_range_frame,height=1,width=5)
-        self.range_min_text_box.pack(side='left')
+        self.range_min_text_box_entry = tk.Entry(self.generated_values_range_frame,width=5)
+        self.range_min_text_box_entry.pack(side='left')
         self.range_or_text = tk.Label(self.generated_values_range_frame,text="to")
         self.range_or_text.pack(side='left')
-        self.range_max_text_box = tk.Text(self.generated_values_range_frame,height=1,width=5)
-        self.range_max_text_box.pack(side='left')
+        self.range_max_text_box_entry = tk.Entry(self.generated_values_range_frame,width=5)
+        self.range_max_text_box_entry.pack(side='left')
 
-        self.randomness_ammount_slider = tk.Scale(self.data_window, variable=self.randomness_ammount, from_=0.1, to=10, label='Randomness', resolution=0.1, orient='horizontal',length=125)
+        #number of data points stuff
+        self.num_data_points_frame = tk.Frame(self.data_window)
+        self.num_data_points_label = tk.Label(self.num_data_points_frame,text='# of data points')
+        self.num_data_points_label.pack()
+        self.num_data_points_text_box_entry = tk.Entry(self.num_data_points_frame,width=8)
+        self.num_data_points_text_box_entry.pack()
+        
 
+        self.randomness_ammount_slider = tk.Scale(self.data_window, variable=self.randomness_ammount, from_=0, to=10000, label='Randomness', resolution=0.2, orient='horizontal',length=150)
+        
+        self.generate_data_button = tk.Button(self.data_window,text='Generate Data',command=self.generate_data)
         
     def data_collection_option_changed(self,*args):
         """
@@ -213,16 +228,22 @@ class DataWindow():
         if self.drop_down_window.get() == 'pull from csv file':
             #----place corresponding widets in code-----
             self.file_button.grid(row=2,column=2)
+            self.generate_data_button.grid_forget()
+            self.generate_data_button.grid(row=3,column=2)
 
             self.chose_function_frame.grid_forget()
             self.generated_values_range_frame.grid_forget()
             self.randomness_ammount_slider.grid_forget()
+            self.num_data_points_frame.grid_forget()
             #----------------------------------------
         elif self.drop_down_window.get() == 'guassian noise':
             #----place corresponding widets in code-----
             self.chose_function_frame.grid(row=1,column=2)
             self.generated_values_range_frame.grid(row=2,column=1)
             self.randomness_ammount_slider.grid(row=2,column=3)
+            self.generate_data_button.grid_forget()
+            self.generate_data_button.grid(row=3,column=2)
+            self.num_data_points_frame.grid(row=2,column=2)
 
             self.file_button.grid_forget()
             #----------------------------------------
@@ -233,8 +254,29 @@ class DataWindow():
         """
         filename = filedialog.askopenfilename(filetypes=[('CSV files', '*.csv')])
         print(f"Selected file: {filename}")
+    
+    def generate_data(self):
+        x = symbols('x')
+        func_str = self.function__text_box_entry.get()
+        func_sympy = sympify(func_str)
+        func = lambdify(x, func_sympy, 'numpy')
+        
+        min = int(self.range_min_text_box_entry.get())
+        max = int(self.range_max_text_box_entry.get())
 
+        num_data_points = int(self.num_data_points_text_box_entry.get())
+        randomness_ammount = int(self.randomness_ammount.get())
 
+        x_values = np.linspace(min, max, num_data_points)
+        y_values = func(x_values) + np.random.normal(0, randomness_ammount, num_data_points)
+
+        self.main_ui_reference.update_graph(x_values,y_values)
+        pass
+       
+
+    def are_all_options_filled_out(self):
+        if self.function.get() == '' or self.range_min.get() == '' or self.range_max.get() == "":
+            pass
 
 
 

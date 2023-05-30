@@ -1,5 +1,8 @@
 import csv
+
 class DataUtils:
+
+    
     def pull_data_from_csv_file(file_name):
         x_data = []
         y_data = []

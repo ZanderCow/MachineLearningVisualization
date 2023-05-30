@@ -1,6 +1,8 @@
 
 import numpy as np
 import concurrent.futures
+import re
+
 
 class FunctionUtils:
     def compute_single_value(numpy_function_reference, x):
@@ -56,7 +58,7 @@ class FunctionUtils:
         return y_values 
 
 
-    def compute_array_of_xvalues_multi_threaded(numpy_function_reference, x_values):
+    def compute_array_of_xvalues_multi_threaded(numpy_function, x_values):
         """
         This function uses multi-threading to apply a given numpy function to an array of x-values.
 
@@ -78,9 +80,52 @@ class FunctionUtils:
         Note: 
             This function is most effective when the numpy function requires significant computation. For simple functions or small data arrays, the overhead of multi-threading can actually lead to slower execution times compared to a single-threaded approach.
         """
-        results = []
+        results = np.zeros(len(x_values)) #initalizes array
+        
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            results = list(executor.map(lambda x: numpy_function_reference(x), x_values))
+            results = list(executor.map(lambda x: numpy_function(x), x_values))
         return results
     
     
+    def convert_string_polynomial_to_numpy_array_form(function):  
+        # Function that converts polynomial string to numpy array
+        function = function.replace(" ", "") 
+        # Remove spaces for easy string manipulation
+        
+        terms = re.findall('[+-]?[^+-]+', function) 
+        # Split function string into separate terms with regular expressions
+        
+        degree = max(int(re.findall(r'\^(\d+)', term)[0]) if '^' in term else 1 if 'x' in term else 0 for term in terms)
+        # Find the highest degree in the polynomial
+        
+        coefficients = [0] * (degree + 1)
+        # Initialize coefficients list with zeros based on degree
+        
+        for term in terms:
+            # Loop through each term of the polynomial
+            coeff = re.findall(r'([+-]?\d*)x', term)
+            # Find coefficient of x in each term
+            
+            deg = re.findall(r'\^(\d+)', term)
+            # Find degree of x in each term
+
+            if coeff and deg:
+                # If both coefficient and degree are found in a term
+                coefficients[degree - int(deg[0])] = int(coeff[0]) if coeff[0] not in ['-', ''] else -1 if coeff[0] == '-' else 1
+                # Assign coefficient value at correct index in coefficients list
+
+            elif coeff:
+                # If only coefficient is found (degree is implicitly 1)
+                coefficients[degree - 1] = int(coeff[0]) if coeff[0] not in ['-', ''] else -1 if coeff[0] == '-' else 1
+                # Assign coefficient value at correct index in coefficients list
+
+            else:
+                # If only constant term is found (degree is implicitly 0)
+                coefficients[degree] = int(term)
+                # Assign constant value at the last index in coefficients list
+
+        coefficients = np.array(coefficients)
+        # Convert coefficients list to numpy array for efficient manipulation
+
+        return coefficients
+        # Return the numpy array of coefficients

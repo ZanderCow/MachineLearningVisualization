@@ -37,25 +37,28 @@ class DataWindow:
         Args:
             main_ui_reference: The main user interface that will be used as the parent for this window.
         """
-        self.main_ui_reference = main_ui_reference
-        self.data_window = tk.Toplevel(main_ui_reference.main_window)
-        self.data_window.title('Data')
+        self.main_ui_reference = main_ui_reference #creates a main UI refrences that allows for things in this class to call a function from a object of the MainWindow class)
+        self.data_window = tk.Toplevel(main_ui_reference.main_window) #creates a seperate window that is connected to the main_window object in the MainWindow class
+        self.data_window.title('Data') 
         self.data_window.geometry("750x500")
-        for i in range(5): # Assuming a 5x5 grid
+
+        # turns self.data_window into a 5x5 grid. This allows for widgets to be placed nicely 
+        for i in range(5): 
             self.data_window.columnconfigure(i, weight=1, uniform='a')
             self.data_window.rowconfigure(i, weight=1, uniform='a')
         pass
+
 
     def create_drop_down_window(self):
         """
         Creates a drop-down menu within the DataWindow. The options in the drop-down menu allow for choosing
         the data collection method.
         """
-        self.drop_down_window = tk.StringVar(self.data_window)
-        self.drop_down_window.set('Choose option')
-        self.drop_down_window.trace('w', self.data_collection_option_changed)
-        self.drop_down_window_menu = tk.OptionMenu(self.data_window, self.drop_down_window, 'pull from csv file', 'guassian noise')
-        self.drop_down_window_menu.grid(row=0,column=2) 
+        self.drop_down_window = tk.StringVar(self.data_window) # creates a string var that holds a text
+        self.drop_down_window.set('Choose option') # sets string var option to "chose option"
+        self.drop_down_window.trace('w', self.data_collection_option_changed) #sets up the ability for the drop_down_window menu to call data_collection_option_changed() when its option is changed 
+        self.drop_down_window_menu = tk.OptionMenu(self.data_window, self.drop_down_window, 'pull from csv file', 'guassian noise') #creates the drop down menu
+        self.drop_down_window_menu.grid(row=0,column=2) #adds the drop down menu to the frame
         pass
     
     def create_csv_file_button(self):
@@ -69,7 +72,7 @@ class DataWindow:
         """
         Creates a button in the DataWindow for selecting a CSV file for data import.
         """
-        self.chose_function_frame = tk.Frame(self.data_window)
+        self.chose_function_frame = tk.Frame(self.data_window) #holds the tktiner objects below in the function (makes it nicer to look at)
         self.function_text_label = tk.Label(self.chose_function_frame,text="Function")
         self.function_text_label.pack()
         self.function__text_box_entry = tk.Entry(self.chose_function_frame, width=25,text='Function') #varianle that gets stored in
@@ -81,7 +84,7 @@ class DataWindow:
         Creates UI components for specifying the range of values to be generated. This includes two text box entries
         for minimum and maximum values.
         """
-        self.generated_values_range_frame = tk.Frame(self.data_window)
+        self.generated_values_range_frame = tk.Frame(self.data_window) #holds the tktiner objects below in the function (makes it nicer to look at)
         self.range_min_text_box_entry = tk.Entry(self.generated_values_range_frame,width=5)
         self.range_min_text_box_entry.pack(side='left')
         self.range_or_text = tk.Label(self.generated_values_range_frame,text="to")
@@ -94,7 +97,7 @@ class DataWindow:
         """
         Creates UI components for specifying the number of data points. This includes a text label and a text box for input.
         """
-        self.num_data_points_frame = tk.Frame(self.data_window)
+        self.num_data_points_frame = tk.Frame(self.data_window) #holds the tktiner objects below in the function (makes it nicer to look at)
         self.num_data_points_label = tk.Label(self.num_data_points_frame,text='# of data points')
         self.num_data_points_label.pack()
         self.num_data_points_text_box_entry = tk.Entry(self.num_data_points_frame,width=8)
@@ -106,7 +109,7 @@ class DataWindow:
         Creates UI components for specifying the amount of randomness in the generated data. This includes a text label 
         and a text box for input.
         """
-        self.randomness_ammount_frame = tk.Frame(self.data_window)
+        self.randomness_ammount_frame = tk.Frame(self.data_window) #holds the tktiner objects below in the function (makes it nicer to look at)
         self.randomness_ammount_label = tk.Label(self.randomness_ammount_frame,text='randomness')
         self.randomness_ammount_label.pack()
         self.randomness_ammount_text_box_entry = tk.Entry(self.randomness_ammount_frame,width=8)
@@ -134,6 +137,8 @@ class DataWindow:
         self.file_button.grid(row=2,column=2)
         self.generate_data_button.grid_forget()
         self.generate_data_button.grid(row=3,column=2)
+
+        # gets rid the widgets that were displayed when "guassian noise option was selected"
         self.chose_function_frame.grid_forget()
         self.generated_values_range_frame.grid_forget()
         self.randomness_ammount_frame.grid_forget()
@@ -150,6 +155,8 @@ class DataWindow:
         self.generate_data_button.grid_forget()
         self.generate_data_button.grid(row=3,column=2)
         self.num_data_points_frame.grid(row=2,column=2)
+        
+        # gets rid the widgets that were displayed when "chose from csv file option were selected"
         self.file_button.grid_forget()
         pass
 

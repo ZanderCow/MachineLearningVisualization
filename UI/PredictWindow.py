@@ -45,9 +45,11 @@ class PredictWindow:
         predicts the data
         """
         function_pulled_from_text_box = self.function_text_box.get() #grabs function string grom text box
-        FunctionUtils.convert_string_polynomial_to_numpy_array_form(function_pulled_from_text_box) #updates the function variables inside function_object to the one inside the text box 
         prediction_function = self.parent.function_object.function #refrence from the MainWindow.py object function_object object variable 
+        prediction_function.coeff = np.poly1d(FunctionUtils.convert_string_polynomial_to_numpy_array_form(function_pulled_from_text_box)) #updates the function variables inside function_object to the one inside the text box
+
         x_values = self.parent.data_object.x_values # grabs the xvalues from the data object.x_values
         y_values = FunctionUtils.compute_array_of_xvalues_multi_threaded(prediction_function, x_values)
+        
         self.parent.graph_prediction(x_values,y_values)
         pass

@@ -30,34 +30,7 @@ class FunctionUtils:
         result = numpy_function_reference(x)
         return result
     
-    def compute_array_of_xvalues_single_threaded(numpy_function_refrence, x_values):
-        """
-        This function applies a given numpy function to each value in a list of values using a single thread.
-
-        Parameters
-        ----------
-        numpy_function_refrence : function
-            A reference to a numpy function. This function should take a single argument.
-        x_values : list of int, float
-            The list of values to which the numpy function will be applied.
-
-        Returns
-        -------
-        y_values : list of int, float
-            The list of results from applying the numpy function to each value in the input list.
-
-        Example
-        -------
-        >>> import numpy as np
-        >>> compute_array_of_xvalues_single_threaded(np.sqrt, [1, 4, 9])
-        [1.0, 2.0, 3.0]
-        """
-        y_values = []
-        for x in x_values:
-            y_values.append(numpy_function_refrence(x))
-        return y_values 
-
-
+    
     def compute_array_of_xvalues_multi_threaded(numpy_function, x_values):
         """
         This function uses multi-threading to apply a given numpy function to an array of x-values.

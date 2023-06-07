@@ -1,26 +1,94 @@
-
 import numpy as np
-import concurrent.futures
 import re
+import concurrent.futures
+
 
 
 class FunctionUtils:
+    """
+    this class holds all of the functionality for the function.py class
+    """
 
-    def compute_single_value(coefficents, powers, x):
+    def get_powers(coefficents):
+        """
+        gets the power values from a coefficents. 
         
+        Params:
+            coefficents: list
+                -the coefficents of the function
+                NOTE: make sure the function coefficents are in decending order with respect to power. ex: x^2 -9 ->>> [9,0,1]
         
+        Returns: 
+            powers: list
+                -a list of power variables 
+        """
+        powers = []
+        for i, num in enumerate(coefficents):
+            powers.append(i)
+        return powers
 
-        result = numpy_function_reference(x)
-        return result
+    def compute_value(coefficents, powers, x):
+        """
+        computes a single x value over a polynomial function given its coefficents and powers. 
+
+        NOTE: please rearrange your input function to be from least to greatest. 
+        For example the function x^2 -3x +5 would be interpreted as (powers: [0,1,2], coefficents: [5,-3,1].
+
+        Params:
+            coefficents : np.array(float16)
+                -a numpy array of coefficent terms 
+            powers : np.array(int)
+                -a numpy array of power terns
+            x : float
+                -the input value
+            NOTE: this function assumes that powers, and coefficents are the same length
+
+        Returns:
+            total : double 
+                the computed term given
+        
+        """
+        total = 0
+
+        # This code computes the coefficent in parts
+        for i in range(len(coefficents)):
+          total += x ** powers[i] * coefficents[i]
+        return total 
     
-    
-    def compute_function(numpy_function, x_values):
-        results = np.zeros(len(x_values)) #initalizes array
+
+
+    def compute_values_multithreaded(coefficients, powers, x_values):
+        """
+        This code computes a whole entire numpy array into the function.
+
+        Params:
+            coefficents : np.array(float16)
+                -a numpy array of coefficent terms 
+            powers : np.array(int)
+                -a numpy array of power terns
+            x_values : np.array(float16)
+                - a array of floating points as input
+        
+        Returns:
+            results : np.array 
+                the computed terms 
+        
+        Note:
+            -Since the function "def compute_value(coefficents, powers, x):" takes in more than one parameter. A wrapper function is defined "def compute_single_value(x)".
+            -This is so we can use executor.map on the operation to multithread the operation.
+                    
+        """
+        results = np.zeros_like(x_values)  # Create an array to store the results
         
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            results = list(executor.map(lambda x: numpy_function(x), x_values))
+
+            def compute_single_value(x):
+                return FunctionUtils.compute_value(coefficients, powers, x)
+
+            results = np.array(list(executor.map(compute_single_value, x_values))) # Map the computation function to each x in parallel
+        
         return results
-    
+
     
     def convert_string_polynomial_to_numpy_array_form(function):
         """
@@ -64,5 +132,86 @@ class FunctionUtils:
 
         return coefficients
 
+    def compute_gradient(actual,predicted,powers):
+        """
+        Computes the partial derivatives for each coefficent term
 
+        Params:
+            powers : np.array
+                -the power values
+            acutal: np.array
+                -the actual output of the data 
+            predicted : np.array
+                -the predict output of the data that was predicted by the function/hypothesis
+
+        Returns: 
+            partial_derivatives : np.array()
+                - a graident of the partial derivatives computed 
+        
+        Note:
+            -Because this function is multithreaded and takes in more than one parameter. A wrapper function is defined "compute_single_partial_derivative()"
+            -This is so we can use executor.map on the operation to multithread the operation.
+                    
+        """
+        def compute_single_partial_derivative(args):
+            actual, predicted, power = args
+            partial_derivative = np.sum((actual - predicted) * (predicted ** power)) * (-1/len(actual))
+            return np.array(partial_derivative)
+        
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            tasks = [(actual, predicted, power) for power in powers]
+            partial_derivatives = list(executor.map(compute_single_partial_derivative, tasks))
+            return np.array(partial_derivatives)
+
+    
+
+    def update_coefficents(coefficents,computed_gradient,learning_rate):
+        """
+        updates the existing coefficents with regression
+
+        Params:
+            coefficents : np.array
+                - a array of coefficents from the function/hypothesis
+            computed_gradient : np.array
+                - computed partial derivatives 
+            learning_rate : int
+                - size in witch the function should change
+
+        Returns:
+            updated_coefficents : np.array
+                - the updated coefficent values 
+        """
+        updated_coefficents = [] # blank list set to size of coefficent array
+
+        for current_coefficent,partial_derivative in zip(coefficents,computed_gradient):
+            updated_coefficent = current_coefficent - learning_rate * partial_derivative
+            updated_coefficents.append(updated_coefficent)
+
+        return np.array(updated_coefficents)
+
+
+
+    def compute_cost(actual,predicted):
+        """
+        computes the cost
+
+        Param:
+            acutal : np.array
+                - the acutal values of the data
+            predicted : np.array
+                - the predicted values of the data computed by the function
+        
+        Returns: 
+            cost : float
+                - the cost of the function
+        """
+        sum = 0
+        N = len(actual)
+        for i,j in zip(actual,predicted):
+            sum += (i - j) ** 2
+        cost = (1/2*N) * sum
+        return cost
+
+
+    
    

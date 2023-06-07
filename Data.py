@@ -4,23 +4,19 @@ class Data:
     Class used to store the data that will be used
 
     Attributes:
-        x, y : np.array (bfloat16)
+        self.data : np.array (bfloat16)
             -Represents the input data (the values that determine the output). 
             -Uses bfloat16 to save on memory resources.
-            -****ONLY 1D ROW ARRAYS CAN BE USED. THIS ALLOWS IT TO BE VISUALIZED ON THE GRAPH (WILL ADD 2D support in the future****
     """
-    def __init__(self, x, y):
-        """
-        Initalizes the class
+    def __init__(self, data):
+       """
+       initalizes class object
 
-        Parameters:
-            x,y : np.array([]) (bfloat16)
-
-        """
-        self.x = x
-        self.y = y
-
-
+       Param:
+            data : np.array (bfloat16)
+                -input data (cleaned up through csv file)
+       """
+       self.data = data
     pass
         
 

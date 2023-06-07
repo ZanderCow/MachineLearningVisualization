@@ -1,12 +1,13 @@
-import numpy as np
+from numpy import array, float16
+
 class Function:
     """
     this class represents our Hypothesis (a function). 
 
     Attributes:
-        coefficients : np.array (bfloat16)
+        coefficients : np.array (float16)
             -Array of coefficent values that are stored.
-            -Uses bfloat16 to save on memory resources.
+            -Uses float16 to save on memory resources.
             NOTE: see FunctionUtils for how its computed 
         powers: np.array (int)
             - Array of power values that are stored
@@ -19,12 +20,10 @@ class Function:
         inside the class
 
         Parameters: 
-            coefficents, powers : np.array (bfloat16)
-            -Array of coefficent, and power values that are stored.
-            -Uses bfloat16 to save on memory resources.
-
+            coefficents, powers : list
+            -Array/list of coefficent, and power values that are stored.
         """
-        self.coefficients = np.array(coefficents)
-        self.powers = np.array(powers)
+        self.coefficients = array(coefficents,dtype=float16)
+        self.powers = array(powers,dtype=float16)
 
     pass

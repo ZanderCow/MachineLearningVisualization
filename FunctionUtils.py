@@ -1,6 +1,8 @@
 import numpy as np
 import re
 import concurrent.futures
+from multiprocessing import Pool
+import os
 
 
 
@@ -131,6 +133,30 @@ class FunctionUtils:
         coefficients = np.array(coefficients) # Convert coefficients list to numpy array for efficient manipulation
 
         return coefficients
+    
+
+    def compute_single_partial_derivative(actual_i,predicted_i,power):
+        """
+        computes a single partial derivitive at ith location. Useful for parellization
+
+        Args:
+            acutal_i : float16
+                - actual output value
+            predicted_i : float16
+                - predicted value from function/hypothesis aproximiation
+            power : int
+                - power variable
+        
+        Returns: 
+            single_partial_derivative : float16
+                - partiall computed partial derivitve
+
+        Note: 
+            - the computation preformed isnt the full partial dertivitve. Its the part where its compputed at ith value.
+        """
+        single_partial_derivative = (actual_i - predicted_i) * (predicted_i ** power)
+        return np.array(single_partial_derivative)
+        
 
     def compute_gradient(actual,predicted,powers):
         """
@@ -145,23 +171,23 @@ class FunctionUtils:
                 -the predict output of the data that was predicted by the function/hypothesis
 
         Returns: 
-            partial_derivatives : np.array()
+            graident : np.array()
                 - a graident of the partial derivatives computed 
         
-        Note:
-            -Because this function is multithreaded and takes in more than one parameter. A wrapper function is defined "compute_single_partial_derivative()"
-            -This is so we can use executor.map on the operation to multithread the operation.
                     
         """
-        def compute_single_partial_derivative(args):
-            actual, predicted, power = args
-            partial_derivative = np.sum((actual - predicted) * (predicted ** power)) * (-1/len(actual))
-            return np.array(partial_derivative)
-        
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            tasks = [(actual, predicted, power) for power in powers]
-            partial_derivatives = list(executor.map(compute_single_partial_derivative, tasks))
-            return np.array(partial_derivatives)
+        core_count = os.cpu_count()
+        gradient = []
+        M = len(actual)
+
+        for power in powers:
+            partial_derivative = 0
+            for i in range(len(actual)):
+                partial_derivative += FunctionUtils.compute_single_partial_derivative(actual[i],predicted[i],power)
+            partial_derivative = (-1/M) * partial_derivative
+            gradient.append(partial_derivative)
+        return np.array(gradient)
+
 
     
 

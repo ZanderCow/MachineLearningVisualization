@@ -4,7 +4,7 @@ from FunctionUtils import FunctionUtils
 from DataUtils import DataUtils
 from UI import UI
 
-function = "x" #your hypothesis that you chose 
+function = "x^2" #your hypothesis that you chose 
 data_file_location = "Data.csv" #the pathfile where your data is located 
 
 

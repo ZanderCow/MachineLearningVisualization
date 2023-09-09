@@ -1,9 +1,9 @@
 import numpy as np
-from FunctionUtils import FunctionUtils
+from function import FunctionUtils
 import csv
 
 file_name = "data.csv" 
-function = "x^2"
+function = "x^3"
 min = -10
 max = 10
 number_of_data_points = 100

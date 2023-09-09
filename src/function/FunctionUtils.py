@@ -176,7 +176,6 @@ class FunctionUtils:
         
                     
         """
-        core_count = os.cpu_count()
         gradient = []
         M = len(actual)
 

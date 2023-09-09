@@ -3,7 +3,7 @@ import tkinter as tk
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
-from FunctionUtils import FunctionUtils
+from function.FunctionUtils import FunctionUtils
 
 
 

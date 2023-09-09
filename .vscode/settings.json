@@ -1,0 +1,7 @@
+{
+    "python.analysis.extraPaths": [
+        "./src/function",
+        "./src/ui",
+        "./src/data",
+    ]
+}

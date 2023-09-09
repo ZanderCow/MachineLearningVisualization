@@ -1,10 +1,9 @@
-from Function import Function
-from Data import Data
-from FunctionUtils import FunctionUtils
-from DataUtils import DataUtils
-from UI import UI
-
-function = "x^2" #your hypothesis that you chose 
+from function.Function import Function
+from function.FunctionUtils import FunctionUtils
+from data.Data import Data
+from data.DataUtils import DataUtils
+from ui.UI import UI
+function = "x^2" #your hypothesis function that you chose 
 data_file_location = "Data.csv" #the pathfile where your data is located 
 
 
@@ -34,6 +33,7 @@ data_file_location = "Data.csv" #the pathfile where your data is located
 temp_coefficents = FunctionUtils.convert_string_polynomial_to_numpy_array_form(function)
 temp_coefficents = temp_coefficents[::-1]
 temp_powers = FunctionUtils.get_powers(temp_coefficents)
+
 
 function = Function(temp_coefficents,temp_powers)
 

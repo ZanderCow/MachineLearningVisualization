@@ -1,4 +1,5 @@
 import csv
+import os
 from numpy import array, float16
 from pandas import read_csv
 
@@ -12,7 +13,11 @@ class DataUtils:
         This method pulls the data from a csv file and returns it.  
         """
         try:
-            data = read_csv(file_name,header=None)
+            current_dir = os.getcwd()
+            print(current_dir)
+            relative_path = os.path.join(current_dir,'src','data','Data.csv')
+    
+            data = read_csv(relative_path,header=None)
             data = data.to_numpy(dtype=float16)
         except ValueError:
             data = read_csv(file_name)

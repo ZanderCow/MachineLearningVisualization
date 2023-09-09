@@ -14,8 +14,8 @@ learning rate
 - for ever for higher power polynomials I recommend that you choose a very small learning rate like 0.000000000001, otherwise, it will diverge to infinity.
 
 number of iterations
--this tells you how many times are you going to perform the gradient, descent operation.
--is useful because you don't want to click the perform aggression button like 1000 times
--unfortunately, because my code isn't parallelized (runs on the GPU). You should probably use the values that are less than 10,000. Otherwise, the program may crash.
+- this tells you how many times are you going to perform the gradient, descent operation.
+- is useful because you don't want to click the perform aggression button like 1000 times
+- unfortunately, because my code isn't parallelized (runs on the GPU). You should probably use the values that are less than 10,000. Otherwise, the program may crash.
 
 

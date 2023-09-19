@@ -6,6 +6,10 @@ However, I was fascinated by how the mathematics of gradient descent worked for 
 
 This is that program that visualizes how graident decent works from a visual perspective, so that it makes more sense to people who don't understand it hopefully.
 
+in the main class there is a variable called function
+this is the mathmatical function that fits the data. 
+You can you should be able to use proper notation like x^2, but I only designed it to work for polynomials 
+
 
 When you open up the program there is two inputs
 

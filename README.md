@@ -6,6 +6,14 @@ However, I was fascinated by how the mathematics of gradient descent worked for 
 
 This is that program that visualizes how graident decent works from a visual perspective, so that it makes more sense to people who don't understand it hopefully.
 
+
+You will need the following libraries installed:
+- numpy
+- tkinter
+- matplotlib
+
+
+
 in the main class there is 2 variables:
 
 function
@@ -17,7 +25,8 @@ data_file_location
 - this is the file that points to a CSV file called data.csv, which stores random X and Y values.
 - do you want to change the randomness? I did it I use that should be another file inside the program call dataModifier.py there should be some instructions on how you can make your own data points.x1c
 
-When you open up the program there is two inputs
+
+Now that you know what the variables are in the main class, let's run the program. Program runs, you should see input boxes.
 
 learning rate
 - this is the amount that the function will change a.k.a. how much does a function take a step to the local optima.
@@ -28,4 +37,5 @@ number of iterations
 - is useful because you don't want to click the perform aggression button like 1000 times
 - unfortunately, because my code isn't parallelized (runs on the GPU). You should probably use the values that are less than 10,000. Otherwise, the program may crash.
 
-
+You arent experienced with machine learning, just start trying playing around with it and seeing you think it'll think the cost function to be as low as possible. 
+Have fun!

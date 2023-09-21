@@ -33,4 +33,4 @@ Once you're familiar with the main class variables, you can proceed to run the p
 - Given that the code isn't parallelized and doesn't leverage GPU capabilities, it's recommended to keep this value below 10,000 to prevent potential program crashes.
 
 ## Getting Started
-If you're new to machine learning, don't hesitate to experiment with the program. Play around with different configurations and aim to minimize the cost function. Enjoy the learning experience!
+If you're new to machine learning, don't hesitate to experiment with the program. Play around with different configurations and aim to minimize the cost function. have fun!

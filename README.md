@@ -1,41 +1,36 @@
-# MachineLearningVisualization
+# Machine Learning Visualization README
 
+## Introduction
+During my senior year of high school, I embarked on an online machine learning course. Although I didn't complete the course, I was deeply intrigued by the mathematics behind gradient descent, especially in the context of multivariable linear regression. This program is a visualization tool designed to demystify gradient descent, making it more accessible to those unfamiliar with the concept.
 
-In my senior high school, I took a machine learning course online, but unfortunately didn't finish it. 
-However, I was fascinated by how the mathematics of gradient descent worked for multivariable linear regression and I wanted to make a program on it.
+## Prerequisites
+Ensure you have the following libraries installed:
+- `numpy`
+- `tkinter`
+- `matplotlib`
 
-This is that program that visualizes how graident decent works from a visual perspective, so that it makes more sense to people who don't understand it hopefully.
+## Configuration
+Within the main class, there are two key variables:
 
+### 1. `function`
+- Represents the mathematical function tailored to fit the data.
+- While the program supports standard notation like `x^2`, it's primarily designed for polynomial functions. I've incorporated an interpreter to translate mathematical notation into a format compatible with `numpy`. However, due to the complexity of this task, the program currently does not support exponential or logarithmic functions.
 
-You will need the following libraries installed:
-- numpy
-- tkinter
-- matplotlib
+### 2. `data_file_location`
+- Points to a CSV file named `data.csv` containing random X and Y values.
+- If you wish to modify the randomness of the data, refer to the `dataModifier.py` file within the program. This file contains guidelines on customizing your data points.
 
+## Usage
+Once you're familiar with the main class variables, you can proceed to run the program. Upon execution, you'll encounter input boxes for:
 
+### 1. `learning rate`
+- Dictates the magnitude of change in the function, essentially determining the step size towards the local optima.
+- For higher-degree polynomials, it's advisable to opt for a minuscule learning rate, such as `0.000000000001`, to prevent divergence to infinity.
 
-in the main class there is 2 variables:
+### 2. `number of iterations`
+- Specifies the number of times the gradient descent operation will be executed.
+- This feature is particularly handy, eliminating the need to repetitively click the "perform regression" button.
+- Given that the code isn't parallelized and doesn't leverage GPU capabilities, it's recommended to keep this value below 10,000 to prevent potential program crashes.
 
-function
-- this is the mathmatical function that fits the data. 
-- You can you should be able to use proper notation like x^2, but I only designed it to work for polynomials (I decided to build a interpreter that tries to understand the mathematical notation, and convert that to a numpy - representation and that alone was really tedious to implement, so I probably won't make it work for exponential logarithm functions or logarithmic regression)
-
-data_file_location
-
-- this is the file that points to a CSV file called data.csv, which stores random X and Y values.
-- do you want to change the randomness? I did it I use that should be another file inside the program call dataModifier.py there should be some instructions on how you can make your own data points.x1c
-
-
-Now that you know what the variables are in the main class, let's run the program. Program runs, you should see input boxes.
-
-learning rate
-- this is the amount that the function will change a.k.a. how much does a function take a step to the local optima.
-- for ever for higher power polynomials I recommend that you choose a very small learning rate like 0.000000000001, otherwise, it will diverge to infinity.
-
-number of iterations
-- this tells you how many times are you going to perform the gradient, descent operation.
-- is useful because you don't want to click the perform aggression button like 1000 times
-- unfortunately, because my code isn't parallelized (runs on the GPU). You should probably use the values that are less than 10,000. Otherwise, the program may crash.
-
-You arent experienced with machine learning, just start trying playing around with it and seeing you think it'll think the cost function to be as low as possible. 
-Have fun!
+## Getting Started
+If you're new to machine learning, don't hesitate to experiment with the program. Play around with different configurations and aim to minimize the cost function. Enjoy the learning experience!

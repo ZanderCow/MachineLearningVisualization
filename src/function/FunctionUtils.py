@@ -11,6 +11,7 @@ class FunctionUtils:
     this class holds all of the functionality for the function.py class
     """
 
+
     def get_powers(coefficents):
         """
         gets the power values from a coefficents. 

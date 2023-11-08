@@ -43,6 +43,9 @@ class UI:
             - label for the text box entry
         self.number_of_iterations_label : tk.Label()
             - label for the # of iterations
+        self.menu : tk.Menu
+            - menu that displays the diffrent menus
+            - groups the data generator page from the graphing page 
     """
     def __init__(self,data_object,function_object):
         """ 
@@ -62,22 +65,42 @@ class UI:
         self.main_window.title("Machine Learning Thing")
         self.main_window.geometry("500x700") 
 
+        #menu 
+        self.menu_bar = tk.Menu(self.main_window)
+        
+        # Create a "File" menu and add items
+        self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.file_menu.add_command(label="Data", command=None)
+        self.file_menu.add_command(label="Predict", command=None)
+        self.file_menu.add_separator()
+        self.file_menu.add_command(label="Exit", command=None)
+        self.menu_bar.add_cascade(label="File", menu=self.file_menu)
+        self.main_window.config(menu=self.menu_bar)
+
+
+        #graphing stuff
         self.graph_figure = Figure(figsize = (5, 5), dpi = 100) 
         self.graph = self.graph_figure.add_subplot(111)
         self.graph_canvas = FigureCanvasTkAgg(self.graph_figure, master = self.main_window) 
         self.graph_canvas.get_tk_widget().pack() #packs the subplot to the figure/window
 
+       
+        #cost label
         self.cost_function_label = tk.Label(self.main_window,text='Cost:')
         self.cost_function_label.pack()
+        #leaning rate label
         self.learning_rate_label = tk.Label(self.main_window,text="Learning Rate:")
         self.learning_rate_label.pack()
+        #learning rate text box
         self.learning_rate_text_box = tk.Entry(self.main_window,width=10)
         self.learning_rate_text_box.pack()
+        #num of iterations label
         self.number_of_iterations_label = tk.Label(self.main_window,text="# of iterations")
         self.number_of_iterations_label.pack()
+        #num of iterations entry
         self.number_of_iterations = tk.Entry(self.main_window,width=10)
         self.number_of_iterations.pack()
-
+        #predict data button
         self.predict_data_button = tk.Button(text="predict data",command=self.optimize_data)
         self.predict_data_button.pack()
 

@@ -1,12 +1,12 @@
 import numpy as np
-from function import FunctionUtils
+from function.FunctionUtils import FunctionUtils
 import csv
 
-file_name = "data.csv" 
-function = "x^3"
-min = -10
+file_name = "src/data/Data.csv" 
+function = "x^2"
+min = -10 
 max = 10
-number_of_data_points = 100
+number_of_data_points = 
 randomness = 30
 
 

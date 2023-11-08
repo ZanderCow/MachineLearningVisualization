@@ -1,0 +1,4 @@
+-make DataUtils.py part of the actual program when ran (allow the  user to generate data when the programs are on instead of having to run the DataUtils.py file itself)
+- Rewrite UI
+-make a starting screen
+- 

@@ -6,7 +6,7 @@ file_name = "src/data/Data.csv"
 function = "x^2"
 min = -10 
 max = 10
-number_of_data_points = 
+number_of_data_points = 10000
 randomness = 30
 
 
